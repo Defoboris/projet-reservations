@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->string('designation')->nullable();
             $table->string('address')->nullable();
-            $table->foreignId('locality_id')->constrained('localities')->nullOnDelete();
+            $table->foreignId('locality_id')->nullable()->constrained()->nullOnDelete();
             $table->string('website')->nullable();
             $table->string('phone')->nullable();
             $table->timestamps();
