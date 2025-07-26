@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -16,14 +17,12 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/show', [HomeController::class, 'show'])->name('shows');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/venue', [HomeController::class, 'venue'])->name('venues');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/show-details', [HomeController::class, 'showDetail'])->name('show-details');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
