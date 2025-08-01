@@ -12,31 +12,31 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Home');
+        return Inertia::render('WebSite/Home');
     }
 
     public function about()
     {
-        return Inertia::render('About');
+        return Inertia::render('WebSite/About');
     }
 
     public function show()
     {
-        return Inertia::render('Show');
+        return Inertia::render('WebSite/Show');
     }
 
     public function venue()
     {
-        return Inertia::render('Venue');
+        return Inertia::render('WebSite/Venue');
     }
 
     public function contact()
     {
-        return Inertia::render('Contact');
+        return Inertia::render('WebSite/Contact');
     }
 
     public function showDetail()
     {
-        return Inertia::render('ShowDetails');
+        return Inertia::render('WebSite/ShowDetails');
     }
 }

@@ -16,6 +16,8 @@ class Show extends Model
         'slug',
         'description',
         'poster_url',
+        'category',
+        'status',
         'duration',
         'created_in',
         'locality_id',
