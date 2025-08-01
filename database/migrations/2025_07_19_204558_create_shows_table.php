@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('poster_url')->nullable();
             $table->string('category')->nullable();
-            $table->boolean('status')->default(true);
             $table->smallInteger('duration')->unsigned();
             $table->date('created_in');
             $table->foreignId('locality_id')->constrained('localities')->onDelete('cascade');

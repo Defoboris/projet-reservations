@@ -9,6 +9,6 @@ class Locality extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['postal_code', 'locality'];
+    protected $fillable = ['postal_code', 'name'];
 
 }
