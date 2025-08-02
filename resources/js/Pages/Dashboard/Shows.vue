@@ -40,6 +40,9 @@
             <thead class="bg-gray-50">
               <tr>
                 <th class="px-6 py-4 font-medium text-left text-gray-600">
+                  Image
+                </th>
+                <th class="px-6 py-4 font-medium text-left text-gray-600">
                   Show
                 </th>
                 <th class="px-6 py-4 font-medium text-left text-gray-600">
@@ -91,7 +94,7 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 text-gray-600">
-                  {{ getLocalityName(show.locality_id) }}
+                  {{ show.locality.name }}
                 </td>
                 <td class="px-6 py-4">
                   <span
@@ -138,14 +141,17 @@
       :is-open="showModal"
       :mode="modalMode"
       :initial-data="selectedShow"
-      :localities="localities"
+      :venues="venues"
+      :localities="props.localities"
       @close="showModal = false"
-      @save="handleSaveShow"
+      @save="handleSave"
     />
   </AuthLayout>
 </template>
 <script setup>
 import { computed, ref } from "vue";
+import { router } from "@inertiajs/vue3";
+import { toast } from "vue3-toastify";
 import AuthLayout from "@/Layouts/AuthLayout.vue";
 import ShowModal from "@/Components/AuthComponents/Components/ShowModal.vue";
 
@@ -188,7 +194,24 @@ const newShow = ref({
 });
 
 const modalMode = ref("add"); // either 'add' or 'edit'
-const selectedShow = ref(null); 
+const selectedShow = ref({
+  title: "",
+  slug: "",
+  category: "",
+  duration: 90,
+  created_in: new Date().toISOString().split("T")[0],
+  poster_url: "",
+  locality_id: "",
+  bookable: false,
+  description: "",
+});
+
+
+const props = defineProps({
+  shows: Array,
+  venues: Object,
+  localities: Array
+});
 
 const topShows = [
   {
@@ -226,33 +249,6 @@ const topShows = [
     revenue: 64200,
     rating: 4.5,
     gradient: "bg-gradient-to-br from-gray-700 to-black",
-  },
-];
-
-const shows = [
-  {
-    id: 1,
-    title: "Hamilton",
-    slug: "hamilton",
-    description: "A musical about Alexander Hamilton.",
-    poster_url: "https://example.com/hamilton.jpg",
-    category: "Musical",
-    duration: 165,
-    created_in: "2023-08-01",
-    locality_id: 2,
-    bookable: true,
-  },
-  {
-    id: 2,
-    title: "The Lion King",
-    slug: "the-lion-king",
-    description: "A musical adaptation of the Disney classic.",
-    poster_url: "https://example.com/lion-king.jpg",
-    category: "Musical",
-    duration: 150,
-    created_in: "2023-09-12",
-    locality_id: 4,
-    bookable: false,
   },
 ];
 
@@ -295,20 +291,13 @@ const venues = [
   },
 ];
 
-const localities = [
-  { id: 1, name: "Brussels" },
-  { id: 2, name: "Antwerp" },
-  { id: 3, name: "Ghent" },
-  { id: 4, name: "Liège" },
-];
-
 function getLocalityName(id) {
   const locality = localities.find((loc) => loc.id === id);
   return locality ? locality.name : "Unknown";
 }
 
 const filteredShows = computed(() => {
-  let filtered = shows;
+  let filtered = props.shows;
   if (showsFilter.value !== "all") {
     filtered = filtered.filter(
       (show) => show.category.toLowerCase() === showsFilter.value
@@ -348,18 +337,45 @@ function editShow(show) {
   showModal.value = true;
 }
 
-function handleSaveShow(formData) {
+function handleSave(data) {
+  console.log(data);
   if (modalMode.value === "add") {
-    const newId = shows.length ? Math.max(...shows.map((s) => s.id)) + 1 : 1;
-    shows.push({ id: newId, ...formData });
+    router.post(route("admin.shows.store"), data, {
+      preserveScroll: true,
+      onSuccess: () => {
+        showModal.value = false;
+        toast.success("Show created successfully.", {
+          autoClose: 3000,
+          position: "top-right",
+        });
+      },
+    });
   } else {
-    const index = shows.findIndex((s) => s.id === formData.id);
-    if (index !== -1) {
-      shows[index] = { ...formData };
-    }
+    router.put(route("admin.shows.update", data.id), data, {
+      preserveScroll: true,
+      onSuccess: () => {
+        showModal.value = false;
+        toast.success("Show Updated successfully.", {
+          autoClose: 3000,
+          position: "top-right",
+        });
+      },
+    });
   }
+}
 
-  showModal.value = false;
+function deleteShow(id) {
+  if (confirm("Are you sure?")) {
+    router.delete(route("admin.shows.destroy", id), {
+      preserveScroll: true,
+      onSuccess: () => {
+        toast.success("Show deleted successfully.", {
+          autoClose: 3000,
+          position: "top-right",
+        });
+      },
+    });
+  }
 }
 </script>
 <style>

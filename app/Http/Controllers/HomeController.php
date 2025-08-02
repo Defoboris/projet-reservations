@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Show;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,10 @@ class HomeController extends Controller
 
     public function show()
     {
-        return Inertia::render('WebSite/Show');
+        $allShows = Show::where('bookable', true)->with('locality')->get();
+        return Inertia::render('WebSite/Show', [
+            'allShows' => $allShows
+        ]);
     }
 
     public function venue()

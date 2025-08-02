@@ -34,4 +34,9 @@ class Show extends Model
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
     }
+
+    public function locality()
+    {
+        return $this->belongsTo(Locality::class);
+    }
 }

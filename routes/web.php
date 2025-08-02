@@ -27,7 +27,13 @@ Route::get('/show-details', [HomeController::class, 'showDetail'])->name('show-d
 
 Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
     Route::get('/shows', [AdminController::class, 'shows'])->name('shows');
+    Route::post('/shows', [AdminController::class, 'createShow'])->name('shows.store');
+    Route::put('/shows/{show}', [AdminController::class, 'updateShow'])->name('shows.update');
+    Route::delete('/shows/{show}', [AdminController::class, 'destroyShow'])->name('shows.destroy');
+
+
     Route::get('/bookings', [AdminController::class, 'bookings'])->name('bookings');
     Route::get('/venues', [AdminController::class, 'venues'])->name('venues');
     Route::get('/users', [AdminController::class, 'users'])->name('users');
@@ -41,4 +47,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ .'/auth.php';
+require __DIR__ . '/auth.php';

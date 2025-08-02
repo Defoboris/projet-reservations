@@ -153,7 +153,7 @@
   </div>
 </template>
 <script setup>
-import { ref, watchEffect, defineEmits, defineProps } from "vue";
+import { ref, watchEffect } from "vue";
 import { X } from "lucide-vue-next";
 
 const emit = defineEmits(["close", "save"]);
@@ -162,7 +162,7 @@ const props = defineProps({
   isOpen: Boolean,
   mode: {
     type: String,
-    default: 'add'
+    default: "add",
   },
   initialData: {
     type: Object,
@@ -192,8 +192,7 @@ function closeModal() {
 }
 
 function handleSubmit() {
-    console.log(formData.value);
-//   emit("save", formData.value);
+  emit("save", formData.value);
 }
 </script>
 
