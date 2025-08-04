@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ShowRequest;
 use App\Models\Locality;
+use App\Models\Location;
 use App\Models\Show;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,7 +22,7 @@ class AdminController extends Controller
     {
         $shows = Show::with('locality')->get();
         $localities = Locality::all();
-        
+
         return Inertia::render('Dashboard/Shows', [
             'shows' => $shows,
             'localities' => $localities
@@ -74,9 +75,77 @@ class AdminController extends Controller
         return Inertia::render('Dashboard/Booking');
     }
 
+    /**
+     * Displays the venues management dashboard.
+     *
+     * Retrieves all localities from the database and passes them to the
+     * Inertia view for rendering the venues management page.
+     *
+     * @return \Inertia\Response
+     */
+
     public function venues()
     {
-        return Inertia::render('Dashboard/Venues');
+        $venues = Location::with('locality')->get();
+        $localities = Locality::all();
+
+        return Inertia::render('Dashboard/Venues', [
+            'venues' => $venues,
+            'localities' => $localities
+        ]);
+    }
+
+
+    /**
+     * Handles the creation of a venue.
+     *
+     * Creates a new Locality with the data provided in the request
+     * and redirects the user back to the venues management page with a success message.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function createVenue(Request $request)
+    {
+        $data = $request->all();
+
+        $data['slug'] = Str::slug($data['designation']);
+        Location::create($data);
+        return redirect()->back()->with('success', 'Venue created!');
+    }
+
+
+    /**
+     * Handles the update of a venue.
+     *
+     * Updates the venue with the data provided in the request
+     * and redirects the user back to the venues management page with a success message.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Location  $location
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateVenue(Request $request, Location $venue)
+    {
+        $data = $request->all();
+        $data['slug'] = Str::slug($data['designation']);
+        $venue->update($data);
+        return redirect()->back()->with('success', 'Venue updated!');
+    }
+
+    /**
+     * Deletes a venue.
+     *
+     * Removes the venue with the given id from the database
+     * and redirects the user back to the venues management page with a success message.
+     *
+     * @param  \App\Models\Location  $location
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroyVenue(Location $location)
+    {
+        $location->delete();
+        return redirect()->back()->with('success', 'Venue deleted!');
     }
 
     public function users()

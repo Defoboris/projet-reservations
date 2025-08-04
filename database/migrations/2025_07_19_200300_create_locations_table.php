@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->nullable();
+            $table->string('image')->nullable();
+            $table->string('capacity')->nullable();
             $table->string('designation')->nullable();
             $table->string('address')->nullable();
             $table->foreignId('locality_id')->nullable()->constrained()->nullOnDelete();

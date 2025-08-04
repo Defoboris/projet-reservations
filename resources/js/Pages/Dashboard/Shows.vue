@@ -184,14 +184,6 @@ import {
 const showsFilter = ref("all");
 const showsSearch = ref("");
 const showModal = ref(false); // control modal visibility
-const newShow = ref({
-  title: "",
-  category: "",
-  venue: "",
-  minPrice: 0,
-  maxPrice: 0,
-  description: "",
-});
 
 const modalMode = ref("add"); // either 'add' or 'edit'
 const selectedShow = ref({
@@ -213,44 +205,6 @@ const props = defineProps({
   localities: Array
 });
 
-const topShows = [
-  {
-    id: 1,
-    name: "Hamilton",
-    venue: "Broadway Theater",
-    ticketsSold: 1247,
-    revenue: 149640,
-    rating: 4.9,
-    gradient: "bg-gradient-to-br from-blue-500 to-purple-600",
-  },
-  {
-    id: 2,
-    name: "The Lion King",
-    venue: "Minskoff Theatre",
-    ticketsSold: 1156,
-    revenue: 109820,
-    rating: 4.7,
-    gradient: "bg-gradient-to-br from-yellow-500 to-orange-600",
-  },
-  {
-    id: 3,
-    name: "Phantom of Opera",
-    venue: "Royal Opera House",
-    ticketsSold: 987,
-    revenue: 83895,
-    rating: 4.8,
-    gradient: "bg-gradient-to-br from-orange-500 to-red-600",
-  },
-  {
-    id: 4,
-    name: "Chicago",
-    venue: "Ambassador Theatre",
-    ticketsSold: 856,
-    revenue: 64200,
-    rating: 4.5,
-    gradient: "bg-gradient-to-br from-gray-700 to-black",
-  },
-];
 
 const venues = [
   {
@@ -292,7 +246,7 @@ const venues = [
 ];
 
 function getLocalityName(id) {
-  const locality = localities.find((loc) => loc.id === id);
+  const locality = props.localities.find((loc) => loc.id === id);
   return locality ? locality.name : "Unknown";
 }
 

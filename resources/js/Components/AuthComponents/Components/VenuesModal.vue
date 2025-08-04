@@ -4,24 +4,24 @@
     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
   >
     <div class="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] flex flex-col">
-      <!-- Fixed Header -->
+      <!-- Header -->
       <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-white border-b">
         <h3 class="text-xl font-bold text-gray-800">
-          {{ mode === "add" ? "Add New Show" : "Edit Show" }}
+          {{ mode === "add" ? "Add New Location" : "Edit Location" }}
         </h3>
         <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
           <X class="w-6 h-6" />
         </button>
       </div>
 
-      <!-- Scrollable Form Body -->
+      <!-- Body -->
       <div class="flex-1 px-6 py-4 space-y-4 overflow-y-auto">
         <form @submit.prevent="handleSubmit" class="space-y-4">
-          <!-- Title -->
+          <!-- Designation -->
           <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Title</label>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Designation</label>
             <input
-              v-model="formData.title"
+              v-model="formData.designation"
               type="text"
               required
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
@@ -39,52 +39,56 @@
             />
           </div>
 
-          <!-- Category -->
+           <!-- Image -->
           <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Category</label>
-            <select
-              v-model="formData.category"
-              required
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-            >
-              <option value="">Select Category</option>
-              <option value="Musical">Musical</option>
-              <option value="Drama">Drama</option>
-              <option value="Comedy">Comedy</option>
-              <option value="Ballet">Ballet</option>
-            </select>
-          </div>
-
-          <!-- Duration -->
-          <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Duration (minutes)</label>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Image</label>
             <input
-              v-model.number="formData.duration"
-              type="number"
-              required
-              min="1"
+              v-model="formData.image"
+              type="text"
+              placeholder="Optional"
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
             />
           </div>
 
-          <!-- Created In -->
+          <!-- Capacity -->
           <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Created Date</label>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Capacity</label>
             <input
-              v-model="formData.created_in"
-              type="date"
-              required
+              v-model="formData.capacity"
+              type="text"
+              placeholder="Optional"
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
             />
           </div>
 
-          <!-- Poster URL -->
+          <!-- Address -->
           <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Poster URL</label>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Address</label>
             <input
-              v-model="formData.poster_url"
+              v-model="formData.address"
+              type="text"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
+
+          <!-- Website -->
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Website</label>
+            <input
+              v-model="formData.website"
               type="url"
-              placeholder="https://example.com/poster.jpg"
+              placeholder="https://example.com"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Phone</label>
+            <input
+              v-model="formData.phone"
+              type="tel"
+              placeholder="+34 XX XXX XXX"
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
             />
           </div>
@@ -94,7 +98,6 @@
             <label class="block mb-2 text-sm font-medium text-gray-700">Locality</label>
             <select
               v-model="formData.locality_id"
-              required
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
             >
               <option value="">Select Locality</option>
@@ -107,33 +110,10 @@
               </option>
             </select>
           </div>
-
-          <!-- Bookable -->
-          <div>
-            <label class="inline-flex items-center space-x-2 text-sm font-medium text-gray-700">
-              <input
-                type="checkbox"
-                v-model="formData.bookable"
-                class="w-4 h-4 text-purple-600 form-checkbox"
-              />
-              <span>Bookable</span>
-            </label>
-          </div>
-
-          <!-- Description -->
-          <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Description</label>
-            <textarea
-              v-model="formData.description"
-              rows="3"
-              required
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-            ></textarea>
-          </div>
         </form>
       </div>
 
-      <!-- Fixed Footer -->
+      <!-- Footer -->
       <div class="sticky bottom-0 z-10 flex justify-end px-6 py-4 space-x-4 bg-white border-t">
         <button
           type="button"
@@ -148,7 +128,7 @@
           @click="handleSubmit"
           class="px-6 py-2 text-white rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
         >
-          {{ mode === "add" ? "Add Show" : "Save Changes" }}
+          {{ mode === "add" ? "Add Location" : "Save Changes" }}
         </button>
       </div>
     </div>
@@ -170,18 +150,20 @@ const props = defineProps({
   initialData: {
     type: Object,
     default: () => ({
-      title: "",
       slug: "",
-      category: "",
-      duration: 0,
-      created_in: "",
-      poster_url: "",
+      image: "",
+      capcity: "",
+      designation: "",
+      address: "",
       locality_id: "",
-      bookable: false,
-      description: "",
+      website: "",
+      phone: "",
     }),
   },
-  localities: Array,
+  localities: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const formData = ref({});
@@ -198,6 +180,3 @@ function handleSubmit() {
   emit("save", formData.value);
 }
 </script>
-
-
-<style scoped></style>

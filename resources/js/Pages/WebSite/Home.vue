@@ -23,19 +23,20 @@
               unforgettable memories at the finest theaters in the city.
             </p>
             <div class="flex flex-col justify-center gap-4 sm:flex-row">
-              <button
-                @click="currentPage = 'shows'"
+              <Link
+                :href="route('shows')"
                 class="px-8 py-4 text-lg font-semibold text-purple-900 transition-all transform bg-white rounded-full hover:bg-gray-100 hover:scale-105"
               >
                 <Play class="inline w-5 h-5 mr-2" />
                 Explore Shows
-              </button>
-              <button
+              </Link>
+              <Link
+                
                 class="px-8 py-4 text-lg font-semibold text-white transition-all border-2 border-white rounded-full hover:bg-white hover:text-purple-900"
               >
                 <Calendar class="inline w-5 h-5 mr-2" />
                 View Schedule
-              </button>
+              </Link>
             </div>
           </div>
         </div>
