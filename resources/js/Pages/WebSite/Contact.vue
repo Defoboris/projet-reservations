@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="container px-4 py-8 mx-auto">
+    <div class="container h-screen px-4 py-8 mx-auto">
       <div class="max-w-4xl mx-auto">
         <h1 class="mb-8 text-4xl font-bold text-center text-gray-800">
           Contact Us

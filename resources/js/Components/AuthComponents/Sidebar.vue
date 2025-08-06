@@ -43,7 +43,8 @@ import { Link, usePage } from "@inertiajs/vue3";
 import { 
   Theater, Menu, Bell, User, DollarSign, Ticket, Play, Users, BarChart3, Star,
   Plus, Search, Edit, Trash2, Eye, Download, Shield, TrendingUp, PieChart, X,
-  Calendar, MapPin, Settings
+  Calendar, MapPin, Settings,
+  CalendarPlus
 } from 'lucide-vue-next';
 
 defineProps({
@@ -64,6 +65,7 @@ defineProps({
 const sidebarItems = [
   { id: 'admin.dashboard', name: 'Dashboard', icon: BarChart3 },
   { id: 'admin.shows', name: 'Shows', icon: Play },
+  { id: 'admin.representations', name: 'Representations', icon: CalendarPlus },
   { id: 'admin.bookings', name: 'Bookings', icon: Ticket },
   { id: 'admin.venues', name: 'Venues', icon: MapPin },
   { id: 'admin.users', name: 'Users', icon: Users },

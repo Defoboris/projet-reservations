@@ -63,10 +63,24 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Show updated!');
     }
 
+    /**
+     * Deletes a show.
+     *
+     * Removes the show with the given id from the database
+     * and redirects the user back to the shows management page with a success message.
+     *
+     * @param  \App\Models\Show  $show
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroyShow(Show $show)
     {
         $show->delete();
         return redirect()->back()->with('success', 'Show deleted!');
+    }
+
+    public function representations()
+    {
+        return Inertia::render('Dashboard/Representations');
     }
 
 

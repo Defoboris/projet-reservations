@@ -23,7 +23,7 @@ Route::get('/show', [HomeController::class, 'show'])->name('shows');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/venue', [HomeController::class, 'venue'])->name('venues');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
-Route::get('/show-details', [HomeController::class, 'showDetail'])->name('show-details');
+Route::get('/show-details/{show}', [HomeController::class, 'showDetail'])->name('show.details');
 
 Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -33,6 +33,9 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(
     Route::post('/shows', [AdminController::class, 'createShow'])->name('shows.store');
     Route::put('/shows/{show}', [AdminController::class, 'updateShow'])->name('shows.update');
     Route::delete('/shows/{show}', [AdminController::class, 'destroyShow'])->name('shows.destroy');
+
+    Route::get('/representations', [AdminController::class, 'representations'])->name('representations');
+
 
 
     Route::get('/bookings', [AdminController::class, 'bookings'])->name('bookings');

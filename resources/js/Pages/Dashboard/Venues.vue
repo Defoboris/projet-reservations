@@ -126,48 +126,48 @@ const props = defineProps({
   localities: Array,
 });
 
-const venues = [
-  {
-    slug: "opera-de-paris",
-    image: "https://example.com/images/opera.jpg",
-    capacity: "2000",
-    designation: "Opéra de Paris",
-    address: "Place de l'Opéra, 75009 Paris, France",
-    locality_id: 1,
-    website: "https://www.operadeparis.fr",
-    phone: "+33 1 71 25 24 23",
-  },
-  {
-    slug: "broadway-theatre",
-    image: "https://example.com/images/broadway.jpg",
-    capacity: "1761",
-    designation: "Broadway Theatre",
-    address: "1681 Broadway, New York, NY 10019, USA",
-    locality_id: 2,
-    website: "https://broadway.com",
-    phone: "+1 212-239-6200",
-  },
-  {
-    slug: "yaounde-arts-center",
-    image: "https://example.com/images/yaounde.jpg",
-    capacity: "500",
-    designation: "Yaoundé Arts Center",
-    address: "Quartier Bastos, Yaoundé, Cameroon",
-    locality_id: 3,
-    website: null,
-    phone: "+237 6 99 99 99 99",
-  },
-  {
-    slug: "royal-albert-hall",
-    image: "https://example.com/images/royal.jpg",
-    capacity: "5272",
-    designation: "Royal Albert Hall",
-    address: "Kensington Gore, South Kensington, London SW7 2AP, UK",
-    locality_id: 4,
-    website: "https://www.royalalberthall.com",
-    phone: "+44 20 7589 8212",
-  },
-];
+// const venues = [
+//   {
+//     slug: "opera-de-paris",
+//     image: "https://example.com/images/opera.jpg",
+//     capacity: "2000",
+//     designation: "Opéra de Paris",
+//     address: "Place de l'Opéra, 75009 Paris, France",
+//     locality_id: 1,
+//     website: "https://www.operadeparis.fr",
+//     phone: "+33 1 71 25 24 23",
+//   },
+//   {
+//     slug: "broadway-theatre",
+//     image: "https://example.com/images/broadway.jpg",
+//     capacity: "1761",
+//     designation: "Broadway Theatre",
+//     address: "1681 Broadway, New York, NY 10019, USA",
+//     locality_id: 2,
+//     website: "https://broadway.com",
+//     phone: "+1 212-239-6200",
+//   },
+//   {
+//     slug: "yaounde-arts-center",
+//     image: "https://example.com/images/yaounde.jpg",
+//     capacity: "500",
+//     designation: "Yaoundé Arts Center",
+//     address: "Quartier Bastos, Yaoundé, Cameroon",
+//     locality_id: 3,
+//     website: null,
+//     phone: "+237 6 99 99 99 99",
+//   },
+//   {
+//     slug: "royal-albert-hall",
+//     image: "https://example.com/images/royal.jpg",
+//     capacity: "5272",
+//     designation: "Royal Albert Hall",
+//     address: "Kensington Gore, South Kensington, London SW7 2AP, UK",
+//     locality_id: 4,
+//     website: "https://www.royalalberthall.com",
+//     phone: "+44 20 7589 8212",
+//   },
+// ];
 
 function openAddVenueModal() {
   modalMode.value = "add";

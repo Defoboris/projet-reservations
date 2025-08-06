@@ -24,6 +24,7 @@ class HomeController extends Controller
     public function show()
     {
         $allShows = Show::where('bookable', true)->with('locality')->get();
+
         return Inertia::render('WebSite/Show', [
             'allShows' => $allShows
         ]);
@@ -39,8 +40,11 @@ class HomeController extends Controller
         return Inertia::render('WebSite/Contact');
     }
 
-    public function showDetail()
+    public function showDetail(Show $show)
     {
-        return Inertia::render('WebSite/ShowDetails');
+        $show = Show::where('id', $show->id)->with('locality')->first();
+        return Inertia::render('WebSite/ShowDetails', [
+            'show' => $show
+        ]);
     }
 }

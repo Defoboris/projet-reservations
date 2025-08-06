@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="container px-4 py-8 mx-auto">
+    <div class="container h-screen px-4 py-8 mx-auto">
       <h1 class="mb-8 text-4xl font-bold text-gray-800">Our Venues</h1>
 
       <div class="grid gap-8 md:grid-cols-2">
