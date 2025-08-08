@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ShowRequest;
+use App\Models\Show;
+use Inertia\Inertia;
 use App\Models\Locality;
 use App\Models\Location;
-use App\Models\Show;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\Models\Reservation;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\Representation;
+use Illuminate\Support\Carbon;
+use App\Http\Requests\ShowRequest;
+use App\Models\RepresentationReservation;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -80,7 +85,66 @@ class AdminController extends Controller
 
     public function representations()
     {
-        return Inertia::render('Dashboard/Representations');
+        $representations = Representation::with('show', 'location')->get();
+        $shows = Show::with('locality')->get();
+        $locations = Location::all();
+
+        return Inertia::render('Dashboard/Representations', [
+            'representations' => $representations,
+            'shows' => $shows,
+            'locations' => $locations
+        ]);
+    }
+
+/**
+ * Handles the creation of a representation.
+ *
+ * Creates a new Representation with the data provided in the request
+ * and redirects the user back to the representations management page with a success message.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @return \Illuminate\Http\RedirectResponse
+ */
+
+    public function createRepresentation(Request $request)
+    {
+         $data = $request->all();
+
+        Representation::create($data);
+        return redirect()->back()->with('success', 'Representation created!');
+    }
+
+    /**
+     * Updates a representation.
+     *
+     * Updates the representation with the given id with the data provided in the request
+     * and redirects the user back to the representations management page with a success message.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Location  $venue
+     * @return \Illuminate\Http\RedirectResponse
+     */
+     public function updateRepresentation(Request $request, Representation $representation)
+    {
+        $data = $request->all();
+        
+        $representation->update($data);
+        return redirect()->back()->with('success', 'Representation updated!');
+    }
+
+    /**
+     * Deletes a representation.
+     *
+     * Removes the representation with the given id from the database
+     * and redirects the user back to the representations management page with a success message.
+     *
+     * @param  \App\Models\Representation  $representation
+     * @return \Illuminate\Http\RedirectResponse
+     */
+     public function destroyRepresentation(Representation $representation)
+    {
+        $representation->delete();
+        return redirect()->back()->with('success', 'Representation deleted!');
     }
 
 
@@ -175,5 +239,27 @@ class AdminController extends Controller
     public function settings()
     {
         return Inertia::render('Dashboard/Settings');
+    }
+
+    public function createBooking(Request $request)
+    {
+        $data = $request->all();
+        $user_id = Auth::user()->id;
+
+        $newReservation = Reservation::create([
+            'user_id' => $user_id,
+            'booking_date' => Carbon::now(),
+            'status' => 'booked'
+        ]);
+
+        RepresentationReservation::create([
+         'user_id' => $user_id,
+         'representation_id' => $data['representation_id'],
+         'reservation_id' => $newReservation->id,
+         'price_id' => $data['price_id'],
+         'quantity' => $data['quantity']
+        ]);
+
+        return redirect()->back()->with('success', 'Booking created!');
     }
 }

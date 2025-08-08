@@ -292,7 +292,6 @@ function editShow(show) {
 }
 
 function handleSave(data) {
-  console.log(data);
   if (modalMode.value === "add") {
     router.post(route("admin.shows.store"), data, {
       preserveScroll: true,

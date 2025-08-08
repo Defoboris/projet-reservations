@@ -23,7 +23,7 @@
       <!-- Show Details View -->
       <div v-if="currentPage === 'details' && selectedShow" class="grid gap-12 lg:grid-cols-2">
         <div>
-          <img :src="show.poster_url" class="w-96 h-96" alt="">
+          <img :src="props.show.poster_url" class="w-96 h-96" alt="">
           <div class="grid grid-cols-3 gap-4">
             <div :class="selectedShow.gradient" class="h-24 rounded-lg opacity-70"></div>
             <div :class="selectedShow.gradient" class="h-24 rounded-lg opacity-50"></div>
@@ -34,11 +34,11 @@
           <div class="mb-6">
             <span
               class="px-3 py-1 text-sm font-semibold text-purple-800 bg-purple-100 rounded-full"
-              >{{ show.category }}</span
+              >{{ props.show.category }}</span
             >
           </div>
           <h1 class="mb-4 text-4xl font-bold text-gray-800">
-            {{ show.title }}
+            {{ props.show.title }}
           </h1>
           <div class="flex items-center mb-6">
             <div class="flex mr-3 text-yellow-400">
@@ -54,7 +54,7 @@
             >
           </div>
           <p class="mb-8 text-lg text-gray-600">
-            {{ show.description }}
+            {{ props.show.description }}
           </p>
           <div class="p-6 mb-8 bg-gray-50 rounded-xl">
             <h3 class="mb-4 text-lg font-semibold">Show Details</h3>
@@ -125,11 +125,26 @@
               </div>
               <div class="flex items-center mt-2 space-x-3 text-gray-600">
                 <MapPin class="w-5 h-5" />
-                <span>{{ rep.location }}</span>
+                <span>{{ rep.location.address }}</span>
               </div>
               <div class="flex items-center mt-2 space-x-3 text-gray-600">
                 <Ticket class="w-5 h-5" />
-                <span>Price: ${{ rep.price.toFixed(2) }}</span>
+                <div class="flex items-center mt-2 space-x-3 ">
+                  <label class="block mb-2 text-sm font-medium text-gray-700">Price</label>
+                  <select
+                    v-model="price"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                  >
+                    <option value="">Select Show</option>
+                    <option
+                      v-for="price in prices"
+                      :key="price.id"
+                      :value="price.id"
+                    >
+                      {{ price.type }} {{ price.price }}
+                    </option>
+                  </select>
+                </div>
               </div>
             </li>
           </ul>
@@ -151,7 +166,7 @@
 
           <button
             @click="bookRepresentation"
-            :disabled="isLoading || !selectedRepresentationId || quantity < 1"
+            :disabled="isLoading || !selectedRepresentationId || quantity < 1 || !price"
             class="w-full px-4 py-3 text-lg font-semibold text-white transition-colors duration-200 rounded-md bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span v-if="isLoading">Booking...</span>
@@ -179,13 +194,22 @@
 import { ref,onMounted, watch } from "vue";
 import { ArrowLeft, CalendarDays, Clock, MapPin, Ticket, Star } from 'lucide-vue-next';
 import { Link } from '@inertiajs/vue3';
+import { router } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 
-defineProps({
+const props = defineProps({
   show: {
     type: Array,
     required: true,
   },
+  mockRepresentations: {
+    type: Array,
+    required: true,
+  },
+  prices: {
+    type: Array,
+    required: true,
+  }
 });
 
 // Reactive state
@@ -200,6 +224,7 @@ const isLoading = ref(false);
 const isLoadingRepresentations = ref(false);
 const error = ref(null);
 const currentPage = ref('details'); // 'details' or 'booking'
+const price = ref();
 
 // Mock Data (replace with actual API calls)
 const mockShows = [
@@ -250,21 +275,6 @@ const mockShows = [
   },
 ];
 
-const mockRepresentations = {
-  'show-1': [
-    { id: 'rep-1-1', date: '2025-08-15T19:00:00Z', location: 'Majestic Theatre', price: 85.00 },
-    { id: 'rep-1-2', date: '2025-08-16T14:00:00Z', location: 'Majestic Theatre', price: 75.00 },
-    { id: 'rep-1-3', date: '2025-08-16T19:00:00Z', location: 'Majestic Theatre', price: 90.00 },
-  ],
-  'show-2': [
-    { id: 'rep-2-1', date: '2025-09-01T20:00:00Z', location: 'Richard Rodgers Theatre', price: 120.00 },
-    { id: 'rep-2-2', date: '2025-09-02T14:00:00Z', location: 'Richard Rodgers Theatre', price: 110.00 },
-  ],
-  'show-3': [
-    { id: 'rep-3-1', date: '2025-10-05T19:30:00Z', location: 'Imperial Theatre', price: 95.00 },
-  ],
-};
-
 // Functions
 const fetchShows = async () => {
   isLoading.value = true;
@@ -305,7 +315,7 @@ const fetchRepresentations = async () => {
   try {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 500));
-    representations.value = mockRepresentations[selectedShowId.value] || [];
+    representations.value = props.mockRepresentations
   } catch (err) {
     error.value = 'Failed to load representations. Please try again.';
   } finally {
@@ -318,6 +328,12 @@ const bookRepresentation = async () => {
   error.value = null;
   isBookingConfirmed.value = false;
 
+  const data = {
+    'representation_id': selectedRepresentationId.value,
+    'price_id': price.value,
+    'quantity': quantity.value
+  }
+
   if (!selectedRepresentationId.value || quantity.value < 1) {
     error.value = 'Please select a representation and specify a valid quantity.';
     isLoading.value = false;
@@ -327,9 +343,14 @@ const bookRepresentation = async () => {
   try {
     // Simulate API call to create a reservation and representation_reservation
     await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
+    
+    router.post(route("admin.booking.store"), data, {
+      preserveScroll: true,
+      onSuccess: () => {
+        isBookingConfirmed.value = true;
+      },
+    });
 
-    // Assuming success
-    isBookingConfirmed.value = true;
     // Optionally reset form or navigate
     // For this example, we'll keep the confirmation message visible
     // and allow the user to go back to show selection.

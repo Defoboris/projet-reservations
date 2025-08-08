@@ -35,6 +35,9 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(
     Route::delete('/shows/{show}', [AdminController::class, 'destroyShow'])->name('shows.destroy');
 
     Route::get('/representations', [AdminController::class, 'representations'])->name('representations');
+    Route::post('/representations', [AdminController::class, 'createRepresentation'])->name('representations.store');
+    Route::put('/representations/{representation}', [AdminController::class, 'updateRepresentation'])->name('representations.update');
+    Route::delete('/representations/{representation}', [AdminController::class, 'destroyRepresentation'])->name('representations.destroy');
 
 
 
@@ -49,6 +52,9 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::get('/analytics', [AdminController::class, 'analytics'])->name('analytics');
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+
+    Route::post('/booking', [AdminController::class, 'createBooking'])->name('booking.store');
+
 });
 
 Route::middleware('auth')->group(function () {

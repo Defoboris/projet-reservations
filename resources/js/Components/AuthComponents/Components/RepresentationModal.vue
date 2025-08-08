@@ -17,99 +17,51 @@
       <!-- Body -->
       <div class="flex-1 px-6 py-4 space-y-4 overflow-y-auto">
         <form @submit.prevent="handleSubmit" class="space-y-4">
-          <!-- Designation -->
+          <!-- Shows -->
           <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Designation</label>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Show</label>
+            <select
+              v-model="formData.show_id"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="">Select Show</option>
+              <option
+                v-for="show in shows"
+                :key="show.id"
+                :value="show.id"
+              >
+                {{ show.title }}
+              </option>
+            </select>
+          </div>
+          <!-- location -->
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-700">location</label>
+            <select
+              v-model="formData.location_id"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="">Select Location</option>
+              <option
+                v-for="location in locations"
+                :key="location.id"
+                :value="location.id"
+              >
+                {{ location.designation }}
+              </option>
+            </select>
+          </div>
+          <!-- Date In -->
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Date</label>
             <input
-              v-model="formData.designation"
-              type="text"
+              v-model="formData.date"
+              type="date"
               required
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
             />
           </div>
 
-          <!-- Slug -->
-          <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Slug</label>
-            <input
-              v-model="formData.slug"
-              type="text"
-              placeholder="Optional"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-            />
-          </div>
-
-           <!-- Image -->
-          <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Image</label>
-            <input
-              v-model="formData.image"
-              type="text"
-              placeholder="Optional"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-            />
-          </div>
-
-          <!-- Capacity -->
-          <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Capacity</label>
-            <input
-              v-model="formData.capacity"
-              type="text"
-              placeholder="Optional"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-            />
-          </div>
-
-          <!-- Address -->
-          <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Address</label>
-            <input
-              v-model="formData.address"
-              type="text"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-            />
-          </div>
-
-          <!-- Website -->
-          <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Website</label>
-            <input
-              v-model="formData.website"
-              type="url"
-              placeholder="https://example.com"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-            />
-          </div>
-
-          <!-- Phone -->
-          <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Phone</label>
-            <input
-              v-model="formData.phone"
-              type="tel"
-              placeholder="+34 XX XXX XXX"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-            />
-          </div>
-
-          <!-- Locality -->
-          <div>
-            <label class="block mb-2 text-sm font-medium text-gray-700">Locality</label>
-            <select
-              v-model="formData.locality_id"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-            >
-              <option value="">Select Locality</option>
-              <option
-                v-for="locality in localities"
-                :key="locality.id"
-                :value="locality.id"
-              >
-                {{ locality.name }}
-              </option>
-            </select>
-          </div>
         </form>
       </div>
 
@@ -150,20 +102,19 @@ const props = defineProps({
   initialData: {
     type: Object,
     default: () => ({
-      slug: "",
-      image: "",
-      capcity: "",
-      designation: "",
-      address: "",
-      locality_id: "",
-      website: "",
-      phone: "",
+      show_id: "",
+      location_id: "",
+      date: "",
     }),
   },
-  localities: {
+  locations: {
     type: Array,
     default: () => [],
   },
+  shows: {
+    type: Array,
+    default: () => [],
+  }
 });
 
 const formData = ref({});

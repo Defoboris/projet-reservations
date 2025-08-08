@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Price;
+use App\Models\Representation;
 use App\Models\Show;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -43,8 +45,12 @@ class HomeController extends Controller
     public function showDetail(Show $show)
     {
         $show = Show::where('id', $show->id)->with('locality')->first();
+        $mockRepresentations = Representation::where('show_id', $show->id)->with('location')->get();
+        $prices = Price::all();
         return Inertia::render('WebSite/ShowDetails', [
-            'show' => $show
+            'show' => $show,
+            'mockRepresentations' => $mockRepresentations,
+            'prices' => $prices
         ]);
     }
 }

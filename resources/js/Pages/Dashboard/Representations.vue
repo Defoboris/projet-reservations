@@ -55,44 +55,44 @@
             </thead>
             <tbody>
               <tr
-                v-for="show in filteredShows"
-                :key="show.id"
+                v-for="representation in filteredRepresentations"
+                :key="representation.id"
                 class="border-b border-gray-100 hover:bg-gray-50"
               >
                 <td class="px-6 py-4">
                   <div class="flex items-center space-x-3">
                     <img
-                      :src="show.poster_url"
+                      :src="representation.show.poster_url"
                       alt="Poster"
                       class="object-cover w-12 h-12 rounded"
-                      v-if="show.poster_url"
+                      v-if="representation.show.poster_url"
                     />
                     <div>
                       <p class="font-semibold text-gray-800">
-                        {{ show.title }}
+                        {{ representation.show.title }}
                       </p>
                       <p class="text-sm text-gray-500 lowercase">
-                        /{{ show.slug }}
+                        /{{ representation.location.address }}
                       </p>
                     </div>
                   </div>
                 </td>
                 <td class="px-6 py-4 text-gray-600">
-                  {{ show.locality.name }}
+                  {{ representation.location.designation }}
                 </td>
                 <td class="px-6 py-4 text-gray-500">
-                  {{ new Date(show.created_in).toLocaleDateString() }}
+                  {{ new Date(representation.date).toLocaleDateString() }}
                 </td>
                 <td class="px-6 py-4">
                   <div class="flex space-x-2">
                     <button
-                      @click="editShow(show)"
+                      @click="editrRpresentation(representation)"
                       class="p-2 text-blue-600 rounded-lg hover:bg-blue-50"
                     >
                       <Edit class="w-4 h-4" />
                     </button>
                     <button
-                      @click="deleteShow(show.id)"
+                      @click="deleteRepresentation(representation.id)"
                       class="p-2 text-red-600 rounded-lg hover:bg-red-50"
                     >
                       <Trash2 class="w-4 h-4" />
@@ -111,7 +111,7 @@
       :mode="modalMode"
       :initial-data="selectedRepresentation"
       :shows="shows"
-      :localities="props.localities"
+      :locations="props.locations"
       @close="showRepresentationModal = false"
       @save="handleSave"
     />
@@ -156,22 +156,16 @@ const showRepresentationModal = ref(false); // control modal visibility
 
 const modalMode = ref("add"); // either 'add' or 'edit'
 const selectedRepresentation = ref({
-  title: "",
-  slug: "",
-  category: "",
-  duration: 90,
-  created_in: new Date().toISOString().split("T")[0],
-  poster_url: "",
-  locality_id: "",
-  bookable: false,
-  description: "",
+  show_id: "",
+  location_id: "",
+  date: "",
 });
 
 
 const props = defineProps({
   shows: Array,
-  venues: Object,
-  localities: Array
+  representations: Array,
+  locations: Array
 });
 
 
@@ -219,8 +213,8 @@ function getLocalityName(id) {
   return locality ? locality.name : "Unknown";
 }
 
-const filteredShows = computed(() => {
-  let filtered = props.shows;
+const filteredRepresentations = computed(() => {
+  let filtered = props.representations;
   if (representationsFilter.value !== "all") {
     filtered = filtered.filter(
       (show) => show.category.toLowerCase() === representationsFilter.value
@@ -230,7 +224,7 @@ const filteredShows = computed(() => {
     filtered = filtered.filter(
       (show) =>
         show.title.toLowerCase().includes(representationSearch.value.toLowerCase()) ||
-        getLocalityName(show.locality_id)
+        getLocalityName(show.location_id)
           .toLowerCase()
           .includes(representationSearch.value.toLowerCase())
     );
@@ -240,45 +234,39 @@ const filteredShows = computed(() => {
 
 function openAddRepresentationModal() {
   modalMode.value = "add";
-  selectedShow.value = {
-    title: "",
-    slug: "",
-    category: "",
-    duration: 90,
-    created_in: new Date().toISOString().split("T")[0],
-    poster_url: "",
-    locality_id: "",
-    bookable: false,
-    description: "",
+  selectedRepresentation.value = {
+    show_id: "",
+    location_id: "",
+    date: "",
   };
   showRepresentationModal.value = true;
 }
 
-function editShow(show) {
+function editrRpresentation(show) {
   modalMode.value = "edit";
-  selectedShow.value = { ...show };
+  selectedRepresentation.value = { ...show };
   showRepresentationModal.value = true;
 }
 
 function handleSave(data) {
   console.log(data);
   if (modalMode.value === "add") {
-    router.post(route("admin.shows.store"), data, {
+    router.post(route("admin.representations.store"), data, {
       preserveScroll: true,
       onSuccess: () => {
         showRepresentationModal.value = false;
-        toast.success("Show created successfully.", {
+        toast.success("Represention created successfully.", {
           autoClose: 3000,
           position: "top-right",
         });
       },
     });
   } else {
-    router.put(route("admin.shows.update", data.id), data, {
+    router.put(route("admin.representations.update", data.id), data, {
       preserveScroll: true,
       onSuccess: () => {
         showRepresentationModal.value = false;
-        toast.success("Show Updated successfully.", {
+        toast.success("Represention Updated successfully.", {
           autoClose: 3000,
           position: "top-right",
         });
@@ -287,12 +275,12 @@ function handleSave(data) {
   }
 }
 
-function deleteShow(id) {
+function deleteRepresentation(id) {
   if (confirm("Are you sure?")) {
-    router.delete(route("admin.shows.destroy", id), {
+    router.delete(route("admin.representations.destroy", id), {
       preserveScroll: true,
       onSuccess: () => {
-        toast.success("Show deleted successfully.", {
+        toast.success("Represention deleted successfully.", {
           autoClose: 3000,
           position: "top-right",
         });
