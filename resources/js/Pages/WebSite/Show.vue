@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="container h-screen px-4 py-8 mx-auto">
+    <div class="container h-full px-4 py-8 mx-auto">
       <div class="mb-8">
         <h1 class="mb-4 text-4xl font-bold text-gray-800">All Shows</h1>
         <div class="flex flex-wrap gap-4 mb-6">
@@ -26,7 +26,7 @@
           class="transition-shadow bg-white shadow-md cursor-pointer rounded-xl hover:shadow-lg"
           :href="route('show.details', show.id)"
         >
-          <div :style="{ backgroundImage: `url('${show.poster_url}')` }" class="relative h-48 rounded-t-xl">
+          <div :style="{ backgroundImage: `url('${show.poster_url}')` }" class="relative h-48 bg-center bg-cover rounded-t-xl">
             <div
               class="absolute px-2 py-1 text-xs font-semibold bg-white rounded-full top-4 left-4 bg-opacity-90"
             >

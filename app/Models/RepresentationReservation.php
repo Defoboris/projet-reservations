@@ -16,4 +16,24 @@ class RepresentationReservation extends Model
         'price_id',
         'quantity',
     ];
+
+    public function representation()
+    {
+        return $this->belongsTo(Representation::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function price()
+    {
+        return $this->belongsTo(Price::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

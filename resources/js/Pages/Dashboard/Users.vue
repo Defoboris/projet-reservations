@@ -43,18 +43,18 @@
                         <User class="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <p class="font-semibold text-gray-800">{{ user.name }}</p>
-                        <p class="text-sm text-gray-600">ID: {{ user.id }}</p>
+                        <p class="font-semibold text-gray-800">{{ user.name }} {{ user.lastname }}</p>
+                        <p class="text-sm text-gray-600">ID: U00{{ user.id }}</p>
                       </div>
                     </div>
                   </td>
                   <td class="px-6 py-4 text-gray-600">{{ user.email }}</td>
-                  <td class="px-6 py-4 text-gray-600">{{ user.joinDate }}</td>
-                  <td class="px-6 py-4 text-gray-600">{{ user.totalBookings }}</td>
-                  <td class="px-6 py-4 font-semibold text-green-600">${{ user.totalSpent }}</td>
+                  <td class="px-6 py-4 text-gray-600">{{ formatDateTime(user.created_at) }}</td>
+                  <td class="px-6 py-4 text-gray-600">{{ totalBookings(user.representation_reservations) }}</td>
+                  <td class="px-6 py-4 font-semibold text-green-600">${{ getTotalPrice(user.representation_reservations) }}</td>
                   <td class="px-6 py-4">
-                    <span :class="user.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" class="px-3 py-1 text-sm font-medium rounded-full">
-                      {{ user.status }}
+                    <span :class="defineStatus(user.representation_reservations) === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" class="px-3 py-1 text-sm font-medium rounded-full">
+                     {{ defineStatus(user.representation_reservations) }}
                     </span>
                   </td>
                   <td class="px-6 py-4">
@@ -76,6 +76,7 @@
           </div>
         </div>
       </div>
+
   </AuthLayout>
 </template>
 <script setup>
@@ -91,26 +92,28 @@ import {
 const usersSearch = ref('')
 const usersFilter = ref('all')
 
-const users = [
-  { id: 'U001', name: 'John Doe', email: 'john@email.com', joinDate: 'Jan 2023', totalBookings: 12, totalSpent: 1240, status: 'Active' },
-  { id: 'U002', name: 'Jane Smith', email: 'jane@email.com', joinDate: 'Mar 2023', totalBookings: 8, totalSpent: 890, status: 'Active' },
-  { id: 'U003', name: 'Mike Johnson', email: 'mike@email.com', joinDate: 'Jun 2023', totalBookings: 15, totalSpent: 1650, status: 'Active' },
-  { id: 'U004', name: 'Sarah Wilson', email: 'sarah@email.com', joinDate: 'Aug 2023', totalBookings: 3, totalSpent: 320, status: 'Inactive' }
-]
+const props = defineProps({
+  users: {
+    type: Array,
+    required: true,
+  },
+});
+
 
 const filteredUsers = computed(() => {
-  let filtered = users
-  if (usersFilter.value !== 'all') {
-    filtered = filtered.filter(user => user.status.toLowerCase() === usersFilter.value)
-  }
-  if (usersSearch.value) {
-    filtered = filtered.filter(user => 
-      user.name.toLowerCase().includes(usersSearch.value.toLowerCase()) ||
-      user.email.toLowerCase().includes(usersSearch.value.toLowerCase())
-    )
-  }
-  return filtered
-})
+  const statusFilter = usersFilter.value?.toLowerCase();
+  const searchQuery = usersSearch.value?.toLowerCase();
+
+  return props.users.filter(user => {
+    const matchesStatus = statusFilter === 'all' || defineStatus(user.representation_reservations)?.toLowerCase() === statusFilter;
+    const matchesSearch = !searchQuery || 
+      [user.name, user.email, user.lastname]
+        .filter(Boolean) // ignore undefined/null values
+        .some(field => field.toLowerCase().includes(searchQuery));
+
+    return matchesStatus && matchesSearch;
+  });
+});
 
 const viewUser = (user) => {
   console.log('View user:', user)
@@ -121,7 +124,47 @@ const editUser = (user) => {
 }
 
 const toggleUserStatus = (user) => {
-  user.status = user.status === 'Active' ? 'Inactive' : 'Active'
+  const currentStatus = defineStatus(user.representation_reservations);
+  const newStatus = currentStatus === 'Active' ? 'Inactive' : 'Active';
+  
+  // If you need to update the user object:
+  user.status = newStatus;
+
+  return newStatus;
+};
+
+function totalBookings(bookings) {
+  return bookings.length;
+}
+
+const formatDateTime = (dateString) => {
+  const date = new Date(dateString);
+  return `${date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })} ${date.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  })}`;
+};
+const  defineStatus = (bookings) => {
+  if (bookings.length > 3) {
+    return 'Active';
+  } else {
+    return 'Inactive';
+  }
+}
+
+function getTotalPrice(bookings) {
+  let totalPrice = 0;
+  bookings.forEach((booking) => {
+    if (booking.price && booking.price.price) {
+      totalPrice += parseFloat(booking.price.price);
+    }
+  });
+  return totalPrice.toFixed(2);
 }
 </script>
 <style>

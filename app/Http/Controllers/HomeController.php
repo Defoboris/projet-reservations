@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Location;
 use App\Models\Price;
 use App\Models\Representation;
 use App\Models\Show;
@@ -34,7 +35,11 @@ class HomeController extends Controller
 
     public function venue()
     {
-        return Inertia::render('WebSite/Venue');
+        $venues = Location::with('locality')->get();
+
+        return Inertia::render('WebSite/Venue', [
+            'venues' => $venues
+        ]);
     }
 
     public function contact()
