@@ -15,7 +15,9 @@
             </div>
             <div class="flex items-center space-x-2">
               <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600">
+                <Link :href="route('profile.edit')">
                 <User class="w-4 h-4 text-white" />
+                </Link>
               </div>
               <h3 class="text-sm font-medium text-gray-700">Admin User</h3>
                <div class="relative ms-3">
@@ -61,6 +63,8 @@
 import DropdownLink from '@/Components/DropdownLink.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import NavLink from '@/Components/NavLink.vue';
+import { Link } from "@inertiajs/vue3";
+
 
 import { 
   Theater, Menu, Bell, User, DollarSign, Ticket, Play, Users, BarChart3, Star,

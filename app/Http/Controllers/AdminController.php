@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\Representation;
 use Illuminate\Support\Carbon;
 use App\Http\Requests\ShowRequest;
+use App\Models\Price;
 use App\Models\RepresentationReservation;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,49 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        return Inertia::render('Dashboard/Dashboard');
+        $prices = Price::all();
+        $totalPrice = 0;
+
+        foreach ($prices as $price) {
+            $totalPrice += $price->price;
+        }
+
+       $tickets = RepresentationReservation::whereHas('reservation', function ($query) {
+                $query->where('status', 'booked');
+            })->get();
+
+        $totalTickets = 0;
+
+        foreach ($tickets as $ticket) {
+            $totalTickets += $ticket->quantity;
+        }
+
+        $shows = Show::get()->count();
+        $users = User::get()->count();
+
+       $recentBookings = RepresentationReservation::with([
+                'user',
+                'price',
+                'representation' => function ($query) {
+                    $query->with(['show', 'location']);
+                }
+            ])
+            ->whereHas('reservation', function ($query) {
+                $query->where('status', 'booked');
+            })
+            ->orderByDesc('created_at')
+            ->limit(4)
+            ->get();
+
+        
+
+        return Inertia::render('Dashboard/Dashboard', [
+            'totalPrice' => $totalPrice,
+            'totalTickets' => $totalTickets,
+            'shows' => $shows,
+            'users' => $users,
+            'recentBookings' => $recentBookings
+        ]);
     }
 
 
@@ -151,7 +194,7 @@ class AdminController extends Controller
 
     public function bookings()
     {
-        $bookings = $bookings = RepresentationReservation::with([
+        $bookings = RepresentationReservation::with([
             'representation' => function ($query) {
                 $query->with(['show', 'location']);
             },

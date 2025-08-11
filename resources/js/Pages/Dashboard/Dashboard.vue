@@ -6,7 +6,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-gray-600">Total Revenue</p>
-              <p class="text-3xl font-bold text-gray-900">$124,563</p>
+              <p class="text-3xl font-bold text-gray-900">${{ totalPrice }}</p>
               <p class="mt-1 text-sm text-green-600">+12.5% from last month</p>
             </div>
             <div
@@ -21,7 +21,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-gray-600">Tickets Sold</p>
-              <p class="text-3xl font-bold text-gray-900">2,847</p>
+              <p class="text-3xl font-bold text-gray-900">{{ totalTickets}}</p>
               <p class="mt-1 text-sm text-blue-600">+8.2% from last month</p>
             </div>
             <div
@@ -36,7 +36,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-gray-600">Active Shows</p>
-              <p class="text-3xl font-bold text-gray-900">24</p>
+              <p class="text-3xl font-bold text-gray-900">{{ shows }}</p>
               <p class="mt-1 text-sm text-purple-600">3 new this week</p>
             </div>
             <div
@@ -51,7 +51,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-gray-600">Total Users</p>
-              <p class="text-3xl font-bold text-gray-900">12,459</p>
+              <p class="text-3xl font-bold text-gray-900">{{ users }}</p>
               <p class="mt-1 text-sm text-orange-600">+15.3% from last month</p>
             </div>
             <div
@@ -97,14 +97,14 @@
                 </div>
                 <div>
                   <p class="font-medium text-gray-800">
-                    {{ booking.customer }}
+                    {{ booking.user.name }} {{ booking.user.lastname }}
                   </p>
-                  <p class="text-sm text-gray-600">{{ booking.show }}</p>
+                  <p class="text-sm text-gray-600">{{ booking.representation.show.title }}</p>
                 </div>
               </div>
               <div class="text-right">
-                <p class="font-semibold text-gray-800">${{ booking.amount }}</p>
-                <p class="text-sm text-gray-500">{{ booking.time }}</p>
+                <p class="font-semibold text-gray-800">${{ totalPrices(booking) }}</p>
+                <p class="text-sm text-gray-500">  {{ new Date(booking.updated_at).toLocaleDateString() }} {{ new Date(booking.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</p>
               </div>
             </div>
           </div>
@@ -200,36 +200,15 @@ import {
   Settings,
 } from "lucide-vue-next";
 
-const recentBookings = [
-  {
-    id: 1,
-    customer: "John Doe",
-    show: "Hamilton",
-    amount: 240,
-    time: "2 hours ago",
-  },
-  {
-    id: 2,
-    customer: "Jane Smith",
-    show: "The Lion King",
-    amount: 190,
-    time: "4 hours ago",
-  },
-  {
-    id: 3,
-    customer: "Mike Johnson",
-    show: "Phantom of Opera",
-    amount: 170,
-    time: "6 hours ago",
-  },
-  {
-    id: 4,
-    customer: "Sarah Wilson",
-    show: "Chicago",
-    amount: 150,
-    time: "8 hours ago",
-  },
-];
+defineProps({
+  totalPrice: Number,
+  totalTickets: Number,
+  shows: Number,
+  users: Number,
+  recentBookings: Array,
+});
+
+
 
 const topShows = [
   {
@@ -269,6 +248,10 @@ const topShows = [
     gradient: "bg-gradient-to-br from-gray-700 to-black",
   },
 ];
+
+const totalPrices = (reservation) => {
+  return reservation.price.price * reservation.quantity;
+};
 </script>
 <style>
 </style>

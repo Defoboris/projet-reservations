@@ -31,7 +31,7 @@
                 Explore Shows
               </Link>
               <Link
-                
+                :href="route('bookings.my')"
                 class="px-8 py-4 text-lg font-semibold text-white transition-all border-2 border-white rounded-full hover:bg-white hover:text-purple-900"
               >
                 <Calendar class="inline w-5 h-5 mr-2" />

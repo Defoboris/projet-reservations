@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Location;
 use App\Models\Price;
 use App\Models\Representation;
+use App\Models\RepresentationReservation;
 use App\Models\Show;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -57,5 +58,29 @@ class HomeController extends Controller
             'mockRepresentations' => $mockRepresentations,
             'prices' => $prices
         ]);
+    }
+
+    public function myBookings()
+    {
+        $mockReservations = RepresentationReservation::with([
+            'representation' => function ($query) {
+                $query->with(['show', 'location']);
+            },
+            'reservation',
+            'price',
+            'user'
+        ])->get();
+
+        return Inertia::render('WebSite/MyBookings', [
+            'mockReservations' => $mockReservations
+        ]);
+    }
+
+    public function updateBooking(Request $request, RepresentationReservation $booking)
+    {
+        $booking->reservation->update([
+            'status' => $request->status
+        ]);
+        return redirect()->back()->with('success', 'Reservation updated!');
     }
 }

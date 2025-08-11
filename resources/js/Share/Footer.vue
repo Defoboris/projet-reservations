@@ -60,6 +60,10 @@
     </footer>
 </template>
 <script>
+import { 
+  Search, User, Theater, Play, Calendar, Star, MapPin, ArrowLeft, 
+  Users, Ticket, Heart, Settings, Phone, Mail, Facebook, Twitter, Instagram
+} from 'lucide-vue-next'
 
 </script>
 <style scoped>
