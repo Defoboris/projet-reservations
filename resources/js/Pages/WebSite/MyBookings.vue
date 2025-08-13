@@ -20,11 +20,12 @@
             <p class="text-sm">
               Start exploring shows to book your first experience!
             </p>
-            <button
+            <Link
+              :href="route('shows')"
               class="px-4 py-2 mt-6 text-white rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
             >
               Browse Shows
-            </button>
+            </Link>
           </div>
           <div v-else class="overflow-x-auto">
             <table class="w-full table-auto">
@@ -142,7 +143,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import { router } from "@inertiajs/vue3";
+import { router, Link } from "@inertiajs/vue3";
 import {
   Calendar,
   CheckCircle,

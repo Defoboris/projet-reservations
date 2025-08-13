@@ -9,6 +9,7 @@ use App\Models\RepresentationReservation;
 use App\Models\Show;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -62,6 +63,8 @@ class HomeController extends Controller
 
     public function myBookings()
     {
+        $user = Auth::user()->id;
+
         $mockReservations = RepresentationReservation::with([
             'representation' => function ($query) {
                 $query->with(['show', 'location']);
@@ -69,7 +72,7 @@ class HomeController extends Controller
             'reservation',
             'price',
             'user'
-        ])->get();
+        ])->where('user_id', $user)->get();
 
         return Inertia::render('WebSite/MyBookings', [
             'mockReservations' => $mockReservations
