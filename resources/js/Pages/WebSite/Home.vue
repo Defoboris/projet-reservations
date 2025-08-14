@@ -15,6 +15,10 @@
                 >Magic</span
               >
               of Live Theater
+               <span
+                class="text-transparent bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text"
+                >Kuate Joel Parfait </span
+              >
             </h1>
             <p
               class="max-w-3xl mx-auto mb-8 text-xl text-purple-100 md:text-2xl"

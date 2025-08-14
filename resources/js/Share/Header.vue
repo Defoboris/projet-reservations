@@ -9,7 +9,7 @@
             >
               <Theater class="w-5 h-5 text-white" />
             </div>
-            <span class="text-xl font-bold text-gray-800">TheaterHub</span>
+            <span class="text-xl font-bold text-gray-800">KUATE JOEL PARFAIT</span>
           </div>
           <nav class="hidden space-x-6 md:flex">
             <Link

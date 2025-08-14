@@ -7,7 +7,7 @@
               <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600">
                 <Theater class="w-5 h-5 text-white" />
               </div>
-              <span class="text-xl font-bold">TheaterHub</span>
+              <span class="text-xl font-bold">KUATE JOEL PARFAIT</span>
             </div>
             <p class="mb-6 text-gray-400">Your premier destination for discovering and booking the finest theatrical experiences.</p>
             <div class="flex space-x-4">
@@ -46,7 +46,7 @@
         </div>
         
         <div class="flex flex-col items-center justify-between pt-8 border-t border-gray-800 md:flex-row">
-          <p class="text-gray-400">© 2024 TheaterHub. All rights reserved.</p>
+          <p class="text-gray-400">© 2025 Kuate Joel Parfait. All rights reserved.</p>
           <div class="flex items-center mt-4 space-x-4 md:mt-0">
             <span class="text-gray-400">Follow us:</span>
             <div class="flex space-x-3">
