@@ -5,7 +5,7 @@
             >
               <Theater class="w-5 h-5 text-white" />
             </div>
-            <span class="text-xl font-bold text-gray-800">KUATE JOEL PARFAIT</span>
+            <span class="text-xl font-bold text-gray-800">KuateJoel</span>
           </div>
 
 </template>

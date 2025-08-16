@@ -290,6 +290,14 @@ class AdminController extends Controller
         ]);
     }
 
+    public function userUpdate(Request $request, User $user) {
+        $data = $request->all();
+        $user->role = $data['role'];
+
+        $user->save();
+        return redirect()->back()->with('success', 'User Updated!');
+    }
+
     public function analytics()
     {
         return Inertia::render('Dashboard/Analytics');

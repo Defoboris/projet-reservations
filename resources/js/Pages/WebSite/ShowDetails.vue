@@ -344,7 +344,7 @@ const bookRepresentation = async () => {
     // Simulate API call to create a reservation and representation_reservation
     await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
     
-    router.post(route("admin.booking.store"), data, {
+    router.post(route("bookings.store"), data, {
       preserveScroll: true,
       onSuccess: () => {
         isBookingConfirmed.value = true;

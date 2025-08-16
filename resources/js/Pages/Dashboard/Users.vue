@@ -77,11 +77,22 @@
         </div>
       </div>
 
+      <RoleModal
+      v-if="showRoleModal"
+      :is-open="showRoleModal"
+      :mode="modalMode"
+      :initial-data="selectedRole"
+      @close="showRoleModal = false"
+      @save="handleSave"
+    />
   </AuthLayout>
 </template>
 <script setup>
 import { computed, ref } from "vue";
 import AuthLayout from "@/Layouts/AuthLayout.vue";
+import RoleModal from "@/Components/AuthComponents/Components/RoleModal.vue";
+import { toast } from "vue3-toastify";
+import { router } from "@inertiajs/vue3";
 
 import { 
   Theater, Menu, Bell, User, DollarSign, Ticket, Play, Users, BarChart3, Star,
@@ -91,6 +102,12 @@ import {
 
 const usersSearch = ref('')
 const usersFilter = ref('all')
+const showRoleModal = ref(false)
+const modalMode = ref("add"); // either 'add' or 'edit'
+const selectedRole = ref({
+  id: null,
+  role: ""
+});
 
 const props = defineProps({
   users: {
@@ -120,7 +137,10 @@ const viewUser = (user) => {
 }
 
 const editUser = (user) => {
-  console.log('Edit user:', user)
+  modalMode.value = 'edit';
+  selectedRole.value.id = user.id;
+  selectedRole.value.role = user.role;
+  showRoleModal.value = true;
 }
 
 const toggleUserStatus = (user) => {
@@ -165,6 +185,32 @@ function getTotalPrice(bookings) {
     }
   });
   return totalPrice.toFixed(2);
+}
+
+function handleSave(data) {
+  if (modalMode.value === "add") {
+    router.post(route("admin.users.update"), data, {
+      preserveScroll: true,
+      onSuccess: () => {
+        showRoleModal.value = false;
+        toast.success("Represention created successfully.", {
+          autoClose: 3000,
+          position: "top-right",
+        });
+      },
+    });
+  } else {
+    router.put(route("admin.users.update", selectedRole.value.id), data, {
+      preserveScroll: true,
+      onSuccess: () => {
+        showRoleModal.value = false;
+        toast.success("User Updated successfully.", {
+          autoClose: 3000,
+          position: "top-right",
+        });
+      },
+    });
+  }
 }
 </script>
 <style>

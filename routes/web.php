@@ -52,7 +52,6 @@ Route::prefix('admin')
 
     // Bookings management
     Route::get('/bookings', [AdminController::class, 'bookings'])->name('bookings');
-    Route::post('/bookings', [AdminController::class, 'createBooking'])->name('bookings.store');
 
     // Venues
     Route::get('/venues', [AdminController::class, 'venues'])->name('venues');
@@ -62,6 +61,9 @@ Route::prefix('admin')
 
     // Other
     Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::put('/users/{user}', [AdminController::class, 'userUpdate'])->name('users.update');
+
+
     Route::get('/analytics', [AdminController::class, 'analytics'])->name('analytics');
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
 });
@@ -72,6 +74,7 @@ Route::prefix('admin')
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/my-bookings', [HomeController::class, 'myBookings'])->name('bookings.my');
     Route::put('/my-bookings/{booking}', [HomeController::class, 'updateBooking'])->name('bookings.update');
+
 });
 
 // -------------------------
@@ -81,6 +84,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('/bookings', [AdminController::class, 'createBooking'])->name('bookings.store');
+
 });
 
 require __DIR__ . '/auth.php';
